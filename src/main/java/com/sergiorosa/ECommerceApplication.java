@@ -24,7 +24,7 @@ public class ECommerceApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		
 		Categorie cat1 = new Categorie(null, "Computer");
-		Categorie cat2 = new Categorie(null, "Apple computer");
+		Categorie cat2 = new Categorie(null, "Mac Book Apple Computer");
 		
 		categoryRepository.saveAll(Arrays.asList(cat1, cat2));
 		
