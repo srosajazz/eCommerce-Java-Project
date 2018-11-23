@@ -1,66 +1,56 @@
 package com.sergiorosa.domain;
 
-import java.io.Serializable;
-
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-@Entity
-public class Product implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
-	
+public class City {
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private String name;
-	private Double price;
-	
+	private String nome;
 
-	public Product() {
-		
+	@ManyToOne
+	@JoinColumn(name = "city_id")
+	private City city;
+
+	public City() {
+
 	}
 
-
-	public Product(Integer id, String name, Double price) {
+	public City(Integer id, String nome, City city) {
 		super();
 		this.id = id;
-		this.name = name;
-		this.price = price;
+		this.nome = nome;
+		this.city = city;
 	}
-
 
 	public Integer getId() {
 		return id;
 	}
 
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
-
-	public String getName() {
-		return name;
+	public String getNome() {
+		return nome;
 	}
 
-
-	public void setName(String name) {
-		this.name = name;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
-
-	public Double getPrice() {
-		return price;
+	public City getCity() {
+		return city;
 	}
 
-
-	public void setPrice(Double price) {
-		this.price = price;
+	public void setCity(City city) {
+		this.city = city;
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -70,7 +60,6 @@ public class Product implements Serializable{
 		return result;
 	}
 
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -79,7 +68,7 @@ public class Product implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Product other = (Product) obj;
+		City other = (City) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -87,6 +76,5 @@ public class Product implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
+
 }

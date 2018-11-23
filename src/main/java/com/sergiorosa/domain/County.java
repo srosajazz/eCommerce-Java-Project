@@ -1,24 +1,39 @@
 package com.sergiorosa.domain;
 
-public class Client {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@Entity
+public class County implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
-	private String email;
-	private String cpfOrCnpj;
-	private Integer type;
 
-	public Client() {
+	@JsonIgnore
+	@OneToMany(mappedBy="county")
+	private List<City> cities = new ArrayList<>();
+
+	public County() {
 
 	}
 
-	public Client(Integer id, String name, String email, String cpfOrCnpj, Integer type) {
+	public County(Integer id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.email = email;
-		this.cpfOrCnpj = cpfOrCnpj;
-		this.type = type;
 	}
 
 	public Integer getId() {
@@ -37,28 +52,12 @@ public class Client {
 		this.name = name;
 	}
 
-	public String getEmail() {
-		return email;
+	public List<City> getCities() {
+		return cities;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getCpfOrCnpj() {
-		return cpfOrCnpj;
-	}
-
-	public void setCpfOrCnpj(String cpfOrCnpj) {
-		this.cpfOrCnpj = cpfOrCnpj;
-	}
-
-	public Integer getType() {
-		return type;
-	}
-
-	public void setType(Integer type) {
-		this.type = type;
+	public void setCities(List<City> cities) {
+		this.cities = cities;
 	}
 
 	@Override
@@ -77,7 +76,7 @@ public class Client {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Client other = (Client) obj;
+		County other = (County) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -85,5 +84,7 @@ public class Client {
 			return false;
 		return true;
 	}
+	
+	
 
 }
