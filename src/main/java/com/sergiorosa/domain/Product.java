@@ -1,11 +1,16 @@
 package com.sergiorosa.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Product implements Serializable{
@@ -17,6 +22,15 @@ public class Product implements Serializable{
 	private Integer id;
 	private String name;
 	private Double price;
+	
+
+	@ManyToMany
+	@JoinTable(name = "PRODUCT_CATEGORIE",
+		joinColumns = @JoinColumn(name = "product_id"),
+		inverseJoinColumns = @JoinColumn(name = "categorie_id")
+	)
+	
+	private List<Categorie> categories = new ArrayList<>();
 	
 
 	public Product() {
@@ -62,6 +76,13 @@ public class Product implements Serializable{
 	}
 
 
+	public List<Categorie> getCategories() {
+		return categories;
+	}
+
+	public void setCategorias(List<Categorie> categories) {
+		this.categories = categories;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -87,6 +108,8 @@ public class Product implements Serializable{
 			return false;
 		return true;
 	}
-	
+
+
+
 	
 }

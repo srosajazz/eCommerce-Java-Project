@@ -1,11 +1,14 @@
 package com.sergiorosa.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 
 @Entity 
@@ -19,6 +22,11 @@ public class Categorie implements Serializable{
 	private Integer id;
 	private String name;
 	
+	
+	@ManyToMany(mappedBy="categories")
+	private List<Product> produt = new ArrayList<>();
+
+	
 	public Categorie() {
 	}
 
@@ -28,6 +36,7 @@ public class Categorie implements Serializable{
 		this.name = name;
 	}
 
+	
 	public Integer getId() {
 		return id;
 	}
@@ -42,6 +51,14 @@ public class Categorie implements Serializable{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<Product> getProdut() {
+		return produt;
+	}
+
+	public void setProduts(List<Product> produt) {
+		this.produt = produt;
 	}
 
 	@Override
