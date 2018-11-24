@@ -1,6 +1,6 @@
 # eCommerce-Java-Project
 
-Full stack complete project! Java Spring Boot in the back-end & Ionic in the front-end.
+Full stack project! Java Spring Boot in the back-end & Ionic in the front-end.
 Spring Boot, Hibernate, REST, Ionic, JWT, S3, MySQL, MongoDB
 
 * Deploy domain models
