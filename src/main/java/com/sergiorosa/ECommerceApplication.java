@@ -1,5 +1,6 @@
 package com.sergiorosa;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +12,21 @@ import com.sergiorosa.domain.Address;
 import com.sergiorosa.domain.Categorie;
 import com.sergiorosa.domain.City;
 import com.sergiorosa.domain.Client;
+import com.sergiorosa.domain.Payment;
+import com.sergiorosa.domain.PaymentWithCreditCard;
+import com.sergiorosa.domain.PaymentWithInvoice;
 import com.sergiorosa.domain.Product;
+import com.sergiorosa.domain.Request;
 import com.sergiorosa.domain.State;
 import com.sergiorosa.domain.enums.ClientType;
+import com.sergiorosa.domain.enums.PaymentStatus;
 import com.sergiorosa.repositories.AddressRepository;
 import com.sergiorosa.repositories.CategoryRepository;
 import com.sergiorosa.repositories.CityRepository;
 import com.sergiorosa.repositories.ClientRepository;
+import com.sergiorosa.repositories.PaymentRepository;
 import com.sergiorosa.repositories.ProductRepository;
+import com.sergiorosa.repositories.RequestRepository;
 import com.sergiorosa.repositories.StateRepository;
 
 @SpringBootApplication
@@ -41,6 +49,12 @@ public class ECommerceApplication implements CommandLineRunner {
 
 	@Autowired
 	private ClientRepository clientRepository;
+	
+	@Autowired
+	private PaymentRepository paymentRepository;
+	
+	@Autowired
+	private RequestRepository requestRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ECommerceApplication.class, args);
@@ -90,6 +104,23 @@ public class ECommerceApplication implements CommandLineRunner {
 
 		clientRepository.saveAll(Arrays.asList(cli1));
 		addressRepository.saveAll(Arrays.asList(a1, a2));
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+		Request req1 = new Request(null, sdf.parse("25/11/2018 10:00"), cli1, a1);
+		Request req2 = new Request(null, sdf.parse("10/12/2018 10:00"), cli1, a2);
+		
+
+		Payment pay1 = new PaymentWithCreditCard(null, PaymentStatus.PAIDOFF, req1, 5);
+		req1.setPayment(pay1);
+		
+		Payment pay2 = new PaymentWithInvoice(null, PaymentStatus.PENDING, req2, sdf.parse("21/12/2018 00:00"), null);
+		req2.setPayment(pay2);
+		
+		cli1.getRequest().addAll(Arrays.asList(req1, req2));
+		
+		requestRepository.saveAll(Arrays.asList(req1, req2));
+		paymentRepository.saveAll(Arrays.asList(pay1, pay2));
 
 	}
 }

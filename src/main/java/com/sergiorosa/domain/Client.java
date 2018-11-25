@@ -18,28 +18,31 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sergiorosa.domain.enums.ClientType;
 
 @Entity
-public class Client implements Serializable{
+public class Client implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
-	@Id 
-	@GeneratedValue(strategy=GenerationType.IDENTITY) 
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
 	private String email;
 	private String cpfOrCnpj;
 	private Integer type;
-	
+
 	@JsonManagedReference
-	@OneToMany(mappedBy="client")
+	@OneToMany(mappedBy = "client")
 	private List<Address> adresses = new ArrayList<>();
-	
+
 	@ElementCollection
-	@CollectionTable(name="PHONE")
+	@CollectionTable(name = "PHONE")
 	private Set<String> phones = new HashSet<>();
-	
+
+	@OneToMany(mappedBy="client")
+	private List<Request> request = new ArrayList<>();
+
 	public Client() {
-		
+
 	}
 
 	public Client(Integer id, String name, String email, String cpfOrCnpj, ClientType type) {
@@ -107,6 +110,13 @@ public class Client implements Serializable{
 		this.phones = phones;
 	}
 
+	public List<Request> getRequest() {
+		return request;
+	}
+
+	public void setRequest(List<Request> request) {
+		this.request = request;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -131,7 +141,5 @@ public class Client implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
 
 }
