@@ -2,7 +2,9 @@ package com.sergiorosa.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,34 +13,33 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-public class Product implements Serializable{
-	
+public class Product implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
 	private Double price;
-	
+
 	@JsonBackReference
 	@ManyToMany
-	@JoinTable(name = "PRODUCT_CATEGORIE",
-		joinColumns = @JoinColumn(name = "product_id"),
-		inverseJoinColumns = @JoinColumn(name = "categorie_id")
-	)
-	
+	@JoinTable(name = "PRODUCT_CATEGORIE", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "categorie_id"))
+
 	private List<Categorie> categories = new ArrayList<>();
-	
+
+	@OneToMany(mappedBy="id.product")
+	private Set<ItemOrder> items = new HashSet<>();
 
 	public Product() {
-		
-	}
 
+	}
 
 	public Product(Integer id, String name, Double price) {
 		super();
@@ -46,37 +47,40 @@ public class Product implements Serializable{
 		this.name = name;
 		this.price = price;
 	}
-
+	
+	public List<Request> getRequest(){
+		List<Request> list = new ArrayList<>();
+		for (ItemOrder x : items) {
+			list.add(x.getRequest());
+		}
+		return list;
+	}
+	
+	
 
 	public Integer getId() {
 		return id;
 	}
 
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
 
 	public String getName() {
 		return name;
 	}
 
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 
 	public Double getPrice() {
 		return price;
 	}
 
-
 	public void setPrice(Double price) {
 		this.price = price;
 	}
-
 
 	public List<Categorie> getCategories() {
 		return categories;
@@ -85,6 +89,15 @@ public class Product implements Serializable{
 	public void setCategorias(List<Categorie> categories) {
 		this.categories = categories;
 	}
+
+	public Set<ItemOrder> getItems() {
+		return items;
+	}
+
+	public void setItems(Set<ItemOrder> items) {
+		this.items = items;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -92,7 +105,6 @@ public class Product implements Serializable{
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -111,7 +123,4 @@ public class Product implements Serializable{
 		return true;
 	}
 
-
-
-	
 }

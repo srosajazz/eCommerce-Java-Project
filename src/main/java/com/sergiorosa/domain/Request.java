@@ -2,6 +2,8 @@ package com.sergiorosa.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,97 +12,93 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Request implements Serializable{
-	 
+public class Request implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
-	
-	
-	@Id 
-	@GeneratedValue(strategy=GenerationType.IDENTITY) 
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private Date instant;
-	
-	
-	@OneToOne(cascade=CascadeType.ALL, mappedBy="request")
-	private Payment payment;
-	
-	@ManyToOne
-	@JoinColumn(name="client_id")
-	private Client client;
-	
-	@ManyToOne
-	@JoinColumn(name="address_of_delivery_id")
-	private Address deliveryAddress;
-	
-	
-	public Request() {
-		
-	}
 
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "request")
+	private Payment payment;
+
+	@ManyToOne
+	@JoinColumn(name = "client_id")
+	private Client client;
+
+	@ManyToOne
+	@JoinColumn(name = "address_of_delivery_id")
+	private Address deliveryAddress;
+
+	@OneToMany(mappedBy="id.request")
+	private Set<ItemOrder> items = new HashSet<>();
+
+	public Request() {
+
+	}
 
 	public Request(Integer id, Date instant, Client client, Address deliveryAddress) {
 		super();
 		this.id = id;
 		this.instant = instant;
-		
+
 		this.client = client;
 		this.deliveryAddress = deliveryAddress;
 	}
-
 
 	public Integer getId() {
 		return id;
 	}
 
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
 
 	public Date getInstant() {
 		return instant;
 	}
 
-
 	public void setInstant(Date instant) {
 		this.instant = instant;
 	}
-
 
 	public Payment getPayment() {
 		return payment;
 	}
 
-
 	public void setPayment(Payment payment) {
 		this.payment = payment;
 	}
-
 
 	public Client getClient() {
 		return client;
 	}
 
-
 	public void setClient(Client client) {
 		this.client = client;
 	}
-
 
 	public Address getDeliveryAddress() {
 		return deliveryAddress;
 	}
 
-
 	public void setDeliveryAddress(Address deliveryAddress) {
 		this.deliveryAddress = deliveryAddress;
 	}
 
+	public Set<ItemOrder> getItems() {
+		return items;
+	}
+
+	public void setItems(Set<ItemOrder> items) {
+		this.items = items;
+	}
 
 	@Override
 	public int hashCode() {
@@ -109,7 +107,6 @@ public class Request implements Serializable{
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -128,6 +125,4 @@ public class Request implements Serializable{
 		return true;
 	}
 
-	
-	
 }

@@ -12,6 +12,7 @@ import com.sergiorosa.domain.Address;
 import com.sergiorosa.domain.Categorie;
 import com.sergiorosa.domain.City;
 import com.sergiorosa.domain.Client;
+import com.sergiorosa.domain.ItemOrder;
 import com.sergiorosa.domain.Payment;
 import com.sergiorosa.domain.PaymentWithCreditCard;
 import com.sergiorosa.domain.PaymentWithInvoice;
@@ -24,6 +25,7 @@ import com.sergiorosa.repositories.AddressRepository;
 import com.sergiorosa.repositories.CategoryRepository;
 import com.sergiorosa.repositories.CityRepository;
 import com.sergiorosa.repositories.ClientRepository;
+import com.sergiorosa.repositories.ItemOrderRepository;
 import com.sergiorosa.repositories.PaymentRepository;
 import com.sergiorosa.repositories.ProductRepository;
 import com.sergiorosa.repositories.RequestRepository;
@@ -49,12 +51,15 @@ public class ECommerceApplication implements CommandLineRunner {
 
 	@Autowired
 	private ClientRepository clientRepository;
-	
+
 	@Autowired
 	private PaymentRepository paymentRepository;
-	
+
 	@Autowired
 	private RequestRepository requestRepository;
+
+	@Autowired
+	private ItemOrderRepository itemOrderRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ECommerceApplication.class, args);
@@ -109,18 +114,30 @@ public class ECommerceApplication implements CommandLineRunner {
 
 		Request req1 = new Request(null, sdf.parse("25/11/2018 10:00"), cli1, a1);
 		Request req2 = new Request(null, sdf.parse("10/12/2018 10:00"), cli1, a2);
-		
 
 		Payment pay1 = new PaymentWithCreditCard(null, PaymentStatus.PAIDOFF, req1, 5);
 		req1.setPayment(pay1);
-		
+
 		Payment pay2 = new PaymentWithInvoice(null, PaymentStatus.PENDING, req2, sdf.parse("21/12/2018 00:00"), null);
 		req2.setPayment(pay2);
-		
+
 		cli1.getRequest().addAll(Arrays.asList(req1, req2));
-		
+
 		requestRepository.saveAll(Arrays.asList(req1, req2));
 		paymentRepository.saveAll(Arrays.asList(pay1, pay2));
+
+		ItemOrder io1 = new ItemOrder(req1, p1, 0.00, 2000.00, 1);
+		ItemOrder io2 = new ItemOrder(req1, p3, 0.00, 80.00, 2);
+		ItemOrder io3 = new ItemOrder(req2, p2, 100.00, 800.00, 1);
+
+		req1.getItems().addAll(Arrays.asList(io1, io2));
+		req2.getItems().addAll(Arrays.asList(io3));
+
+		p1.getItems().addAll(Arrays.asList(io1));
+		p2.getItems().addAll(Arrays.asList(io3));
+		p3.getItems().addAll(Arrays.asList(io2));
+
+		itemOrderRepository.saveAll(Arrays.asList(io1, io2, io3));
 
 	}
 }
